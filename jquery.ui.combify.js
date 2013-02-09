@@ -1,9 +1,9 @@
 /*
-* File:  jquery.ui.combify.js
+* jQuery UI Combify
 * A jQuery UI plugin to change any HTML select into a combobox where the user can enter data that isn't in the select list
-* Example usage: $(#SomeSelect).combify()
 *
-* Date: October 2012
+* Copyright (c) October 2012 Tom Mooney
+* licensed under the MIT license, http://www.opensource.org/licenses/mit-license.php
 */
 
 (function ($) {
