@@ -35,6 +35,9 @@
             //Remove the the id and name from the original select since they are now on the text input so that posted forms will get the correct value
             select.removeAttr('id');
             select.removeAttr('name');
+            select.on('change', function (event) {
+                event.stopPropagation();
+            });
 
             //Get all the options from the select list and put them in an array for use in the autocomplete data source
             selectOptions.each(function (i) {
@@ -74,6 +77,7 @@
                 input = $(this).prev().find(".ui-combobox-input").first();
                 var content = $(this).val();
                 input.val(content);
+                input.trigger('change');
             });
 
             //Add the button to trigger the dropdown
@@ -201,6 +205,7 @@
 
         destroy: function () {
             var select = this.element
+            select.off('change');
             select.prev().remove();
             select.show();
         }
