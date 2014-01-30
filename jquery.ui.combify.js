@@ -56,24 +56,24 @@
 
             //Convert entered values to upper case if capitalizeInput option is true
             if (options.capitalizeInput) {
-                $(inputSelector).css("text-transform", "uppercase");
-                $(inputSelector).data('val', $(inputSelector).val());
-                $(inputSelector).keyup(function () {
+                var input = $(inputSelector);
+                input.css("text-transform", "uppercase").data('val', input.val()).on('keyup', function () {
                     //Make the value upper case if it has changed
-                    if ($(this).data('val') != this.value) {
-                        $(this).val(this.value.toUpperCase());
+                    var theInput = $(this);
+                    if (theInput.data('val') != this.value) {
+                        theInput.change(function () { this.value.toUpperCase(); });
                     }
                     //Store the current value for comparison on next change
-                    $(this).data('val', this.value);
-                    //If keyup event happens before change event then change is never fired, so attach event to blur to trigger change
-                    $(this).blur(function () {
-                        $(this).trigger('change'); 
-                    });
+                    theInput.data('val', this.value);
+
+                    theInput = null;
                 });
+
+                input = null;
             }
 
             //Attach a change event to the select list to put the selected value in the new text input
-            select.change(function () {
+            select.on('change', function () {
                 input = $(this).prev().find(".ui-combobox-input").first();
                 var content = $(this).val();
                 input.val(content);
@@ -154,10 +154,6 @@
                         list.hide();
                     });
 
-                    //Attach an event to move through the list with the arrow keys
-                    $(document).off("keydown.combifySelect");
-                    $(document).on("keydown.combifySelect", nextItem);
-
                     function nextItem(event) {
                         var down = "down",
                             up = "up"
@@ -199,6 +195,10 @@
                             nextItem.attr('selected', true);
                         }
                     }
+
+                    //Attach an event to move through the list with the arrow keys
+                    $(document).off("keydown.combifySelect");
+                    $(document).on("keydown.combifySelect", nextItem);
                 }
             }
         },
