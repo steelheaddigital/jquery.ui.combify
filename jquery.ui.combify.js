@@ -18,7 +18,8 @@
                 id = select.attr('id'),
                 inputSelector = "#" + id,
                 name = select.attr('name'),
-                selectedValue = select.find(':selected').val(),
+                selectedValue = select.find(':selected').text(),
+                //selectedValue = select.find(':selected').val(),
                 selectOptions = select.find('option'),
                 optionArray = new Array();
 
@@ -41,7 +42,8 @@
 
             //Get all the options from the select list and put them in an array for use in the autocomplete data source
             selectOptions.each(function (i) {
-                optionArray.push($(this).val());
+                optionArray.push($(this).text());
+                //optionArray.push($(this).val());
             });
 
             //Add autocomplete to the new input
@@ -75,7 +77,11 @@
             //Attach a change event to the select list to put the selected value in the new text input
             select.on('change', function () {
                 input = $(this).prev().find(".ui-combobox-input").first();
-                var content = $(this).val();
+                // how to get the display text here?
+                var options = $(this)[0].options;
+                var selectedIndex = $(this)[0].selectedIndex;
+                var content = options[selectedIndex].text;
+                //var content = $(this).val();
                 input.val(content);
                 input.trigger('change');
             });
@@ -139,6 +145,7 @@
                         size = 30;
                     }
 
+                    $(list)[0].selectedIndex = -1;
                     list.css({ "width": "auto",
                         "position": "absolute",
                         "z-index": "1"
