@@ -11,28 +11,33 @@
 	border-bottom-right-radius:0;
 }
 
-.ui-combobox {
+.ui-combobox
+{
 	position: relative;
 }
 
-.ui-combobox-toggle {
+.ui-combobox-toggle
+{
 	position: absolute;
-	top: -1px;
+	top: -4px;
 	bottom: 0;
 	right: 0;
-	width: 14px;
-	margin-right: 2px;
-	height:100%;
+	width: 16px;
+	margin-right: 1px;
+	height:18px;
 	/* adjust styles for IE 6/7 */
 	*height: 1.7em;
 	*top: 0.1em;
 }
-.ui-combobox-input {
+
+.ui-combobox-input
+{
 	padding-top: 2px;
 }
 
-.ui-combobox-toggle:hover{
-cursor: default;
+.ui-combobox-toggle:hover
+{
+	cursor: default;
 }
 
 .ui-autocomplete .ui-state-hover
@@ -51,7 +56,7 @@ cursor: default;
 .ui-autocomplete.ui-widget
 {
     font-family: Sans-Serif !important;
-    font-size: 1em !important;
+    /*font-size: 1em !important;*/
 }
 
 .ui-autocomplete.ui-corner-all
