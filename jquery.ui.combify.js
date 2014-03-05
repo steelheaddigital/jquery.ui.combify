@@ -61,7 +61,7 @@
                     //Make the value upper case if it has changed
                     var theInput = $(this);
                     if (theInput.data('val') != this.value) {
-                        theInput.change(function () { this.value.toUpperCase(); });
+                        theInput.val(this.value.toUpperCase());
                     }
                     //Store the current value for comparison on next change
                     theInput.data('val', this.value);
@@ -71,6 +71,11 @@
 
                 input = null;
             }
+
+            //If keyup event happens before change event then change is never fired, so attach event to blur to trigger change
+            $(inputSelector).on('blur', function () {
+                $(this).trigger('change');
+            });
 
             //Attach a change event to the select list to put the selected value in the new text input
             select.on('change', function () {
