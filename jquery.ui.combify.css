@@ -21,14 +21,15 @@
 	bottom: 0;
 	right: 0;
 	width: 14px;
-	margin-right: 2px;
 	height:100%;
+	margin-right: 0;
+	padding-bottom: 1px;
 	/* adjust styles for IE 6/7 */
 	*height: 1.7em;
 	*top: 0.1em;
 }
 .ui-combobox-input {
-	padding-top: 2px;
+
 }
 
 .ui-combobox-toggle:hover{

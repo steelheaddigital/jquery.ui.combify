@@ -15,9 +15,9 @@
             var self = this,
                 select = self.element,
                 options = self.options,
-                id = select.attr('id'),
+                id = select.prop('id'),
                 inputSelector = "#" + id,
-                name = select.attr('name'),
+                name = select.prop('name'),
                 selectedValue = select.find(':selected').val(),
                 selectOptions = select.find('option'),
                 optionArray = new Array();
@@ -33,8 +33,8 @@
 						   '</span></div>');
 
             //Remove the the id and name from the original select since they are now on the text input so that posted forms will get the correct value
-            select.removeAttr('id');
-            select.removeAttr('name');
+            select.removeAttr('id', null);
+            select.removeAttr('name', null);
             select.on('change', function (event) {
                 event.stopPropagation();
             });
@@ -107,6 +107,8 @@
 
                 if (event.which === 40 && event.altKey) {
                     //If the list is already visible then just hide it
+                    event.preventDefault();
+                    event.stopPropagation();
                     if (list.is(":visible")) {
                         list.hide();
                     }
@@ -114,7 +116,7 @@
                         if (options.capitalizeInput) {
                             this.value = this.value.toUpperCase();
                         }
-                        list.autocomplete("close");
+                        $(inputSelector).autocomplete("close");
                         ExpandSelectList($(this), event, $(this).width());
                     }
                 }
@@ -138,21 +140,26 @@
                     //Set the length of the select list to either the number of items in the list or 30, whichever is smaller
                     var size;
                     if (optionArray.length <= 30) {
-                        size = optionArray.length;
+											size = optionArray.length;
                     }
                     else {
                         size = 30;
                     }
-
+										
+										var sizeAttr = size === 1 ? 2 : size;
                     list.css({ "width": "auto",
                         "position": "absolute",
                         "z-index": "1"
                     }) //Puts the list on top of all other elements
-                    	    .attr("size", size) //changes the select list to a listbox so that it will "expand"
+                    	    .prop("size", sizeAttr) //changes the select list to a listbox so that it will "expand"
                     	    .show();
+                    	    
                     if (minWidth > list.width()) {
                         list.css("width", minWidth);
                     }
+										
+										var listLineHeight = parseInt(list.find('option').first().css('font-size'),10);
+										list.css("height", listLineHeight * (size + 1));
 
                     //Attach a one-time event to the document to close the list if the user clicks anywhere else on the page.
                     $(document).one("click", function () {
@@ -177,7 +184,6 @@
 
                         //if the user presses enter trigger the change event on the input to set it's value to the selected value
                         if (event.which === 13 && list.is(":visible")) {
-                            event.preventDefault();
                             list.trigger("change");
                             list.hide();
                             return;
@@ -196,8 +202,8 @@
                             if (direction === up) {
                                 var nextItem = selected.prev();
                             }
-                            selected.attr('selected', false);
-                            nextItem.attr('selected', true);
+                            selected.prop('selected', false);
+                            nextItem.prop('selected', "selected");
                         }
                     }
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JS Tests</title>
+    <link rel="stylesheet" href="qunit.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" type="text/css" media="all" />
+		<link rel="stylesheet" type="text/css" href="../jquery.ui.combify.css" />
+    <script src="qunit.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../jquery.ui.combify.js"></script>
+    <script src="tests.js"></script>
+  <style>
+	</style>
+</head>
+<body>
+    <div>
+			<select id="TwoOptions">
+				<option value="1">Some Option</option>
+				<option value="2">Some Other Option</option>
+			</select>
+    </div>
+    <div style="margin-top: 20px;">
+			<select id="OneOption">
+				<option value="1">Some Option</option>
+			</select>
+    </div>
+    <div style="margin-top: 20px;">
+			<select id="ThreeOptions">
+				<option>Some Option</option>
+				<option selected="selected">Some Other Option</option>
+				<option>Some Other Option</option>
+			</select>
+    </div>
+    <div style="margin-top: 20px;">
+			<select id="LotsOptions">
+				<option>Some Option</option>
+				<option selected="selected">Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+				<option>Some Option</option>
+				<option>Some Other Option</option>
+				<option>Some Other Option</option>
+			</select>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+	$(function() {
+		$("#TwoOptions").combify();
+		$("#OneOption").combify();
+		$("#ThreeOptions").combify({capitalizeInput: true});
+		$("#LotsOptions").combify();
+	});
+</script>
