@@ -10,9 +10,9 @@
         }
     });
 
-    test("Creates input with correct ID, name, and value", function () {
+    test("Creates hidden input with correct ID, name, and value", function () {
         //Act
-        var input = $("input[type=text]").first("#MySelect");
+        var input = $("input[type=hidden]").first("#MySelect");
 
         //Assert
         ok(input);
@@ -22,17 +22,7 @@
     
     test("Creates autocomplete with correct source", function () {
         //Act
-        var autoCompleteDataSource = $("#MySelect").autocomplete( "option", "source" );
-        
-        //Assert
-        deepEqual(autoCompleteDataSource.length, 2);
-        deepEqual(autoCompleteDataSource[0], 'Some Option');
-        deepEqual(autoCompleteDataSource[1], 'Some Other Option');
-    });
-    
-    test("Creates autocomplete with correct source", function () {
-        //Act
-        var autoCompleteDataSource = $("#MySelect").autocomplete( "option", "source" );
+        var autoCompleteDataSource = $("#CombifyInput-MySelect").autocomplete( "option", "source" );
         
         //Assert
         deepEqual(autoCompleteDataSource.length, 2);

@@ -16,9 +16,12 @@
                 select = self.element,
                 options = self.options,
                 id = select.prop('id'),
-                inputSelector = "#" + id,
+                hiddenInputSelector = "#" + id,
+                textInputId = "CombifyInput-" + id,
+                textInputSelector = "#" + textInputId,
                 name = select.prop('name'),
                 selectedValue = select.find(':selected').val(),
+                selectedText = select.find(':selected').text(),
                 selectOptions = select.find('option'),
                 optionArray = new Array();
 
@@ -28,35 +31,56 @@
             //Insert new HTML for a text input and a button to trigger the dropdown
             select.before('<div>' +
 						   '<span class="ui-combobox">' +
-						   '<input type="text" id="' + id + '" name="' + name + '" class="ui-combobox-input" value="' + selectedValue + '">' +
+						   '<input type="hidden" id="' + id + '" name="' + name + '" value="' + selectedValue + '">' +
+						   '<input type="text" id="' + textInputId + '" class="ui-combobox-input" value="' + selectedText + '">' +
 						   '<a class="ui-combobox-toggle"></a>' +
 						   '</span></div>');
 
-            //Remove the the id and name from the original select since they are now on the text input so that posted forms will get the correct value
-            select.removeAttr('id', null);
-            select.removeAttr('name', null);
-            select.on('change', function (event) {
-                event.stopPropagation();
-            });
+            //Remove the the id and name from the original select since they are now on the hidden input so that posted forms will get the correct value
+            select.removeAttr('id', null)
+									.removeAttr('name', null)
+									.on('change', function (event) {
+										event.stopPropagation();
+									});
 
             //Get all the options from the select list and put them in an array for use in the autocomplete data source
             selectOptions.each(function (i) {
-                optionArray.push($(this).val());
+                optionArray.push($(this).text());
             });
 
             //Add autocomplete to the new input
-            $(inputSelector).autocomplete({
+            $(textInputSelector).autocomplete({
                 source: optionArray,
                 select: function (event, ui) {
                     //For some reason selecting a value doesn't automatically trigger the change event on the input, so trigger it here
                     this.value = ui.item.value;
+                    var option = $(select).find('option').filter(function () { return $(this).html() == ui.item.value; }).first()
+                    var selectValue = option.val();
+                    
+                    //set the value of the hidden input to the option value that matches the selected autocomplete value
+                    $(hiddenInputSelector).val(selectValue);  
                     $(this).trigger('change');
                 }
+            })
+            .on('change', function() {
+								var value = $(this).val();
+								var option = $(select).find('option').filter(function () { return $(this).html() == value; }).first()
+
+								//If no matching option is found in the select list, then set the hidden input to the entered value
+								if(!option.length){
+										$(hiddenInputSelector).val(value);
+								}
+								else{
+									$(hiddenInputSelector).val(option.val());
+								}
+            })
+            .on('blur', function () {
+                $(this).trigger('change');
             });
 
             //Convert entered values to upper case if capitalizeInput option is true
             if (options.capitalizeInput) {
-                var input = $(inputSelector);
+                var input = $(textInputSelector);
                 input.css("text-transform", "uppercase").data('val', input.val()).on('keyup', function () {
                     //Make the value upper case if it has changed
                     var theInput = $(this);
@@ -72,17 +96,17 @@
                 input = null;
             }
 
-            //If keyup event happens before change event then change is never fired, so attach event to blur to trigger change
-            $(inputSelector).on('blur', function () {
-                $(this).trigger('change');
-            });
-
             //Attach a change event to the select list to put the selected value in the new text input
             select.on('change', function () {
-                input = $(this).prev().find(".ui-combobox-input").first();
-                var content = $(this).val();
-                input.val(content);
-                input.trigger('change');
+                var hiddenInput = $(this).prev().find("#" + id).first(); //hidden input
+                var selectedValue = $(this).val();
+                var text = $(this).find("option:selected").text();
+                
+                //find the option that matches the value
+                var option = $(select).find('option').filter(function () { return $(this).html() == text }).first()
+                hiddenInput.val(selectedValue);
+                $(textInputSelector).val(option.text());  //set the visible textbox to the value of the options text
+                hiddenInput.trigger('change');
             });
 
             //Add the button to trigger the dropdown
@@ -102,7 +126,7 @@
             });
 
             //Attach an event to expand the select list if the user presses Alt + DownArrow
-            $(inputSelector).keydown(function (event) {
+            $(textInputSelector).keydown(function (event) {
                 var list = $(this).parent().parent().next();
 
                 if (event.which === 40 && event.altKey) {
@@ -116,7 +140,7 @@
                         if (options.capitalizeInput) {
                             this.value = this.value.toUpperCase();
                         }
-                        $(inputSelector).autocomplete("close");
+                        $(textInputSelector).autocomplete("close");
                         ExpandSelectList($(this), event, $(this).width());
                     }
                 }
@@ -133,7 +157,7 @@
                 var list = element.parent().parent().next();
 
                 //If the list is already open or the autocomplete list is open then close the list.
-                if (list.is(":visible") || $(inputSelector).autocomplete("widget").is(":visible")) {
+                if (list.is(":visible") || $(textInputSelector).autocomplete("widget").is(":visible")) {
                     list.hide();
                 }
                 else {
@@ -208,8 +232,8 @@
                     }
 
                     //Attach an event to move through the list with the arrow keys
-                    $(document).off("keydown.combifySelect");
-                    $(document).on("keydown.combifySelect", nextItem);
+                    $(document).off("keydown.combifySelect")
+															 .on("keydown.combifySelect", nextItem);
                 }
             }
         },
