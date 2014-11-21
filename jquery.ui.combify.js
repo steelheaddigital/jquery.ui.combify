@@ -13,35 +13,35 @@
         },
         _create: function () {
             var self = this,
-                select = self.element,
-                options = self.options,
-                id = select.prop('id'),
-                hiddenInputSelector = "#" + id,
-                textInputId = "CombifyInput-" + id,
-                textInputSelector = "#" + textInputId,
-                name = select.prop('name'),
-                selectedValue = select.find(':selected').val(),
-                selectedText = select.find(':selected').text(),
-                selectOptions = select.find('option'),
-                optionArray = new Array();
+            select = self.element,
+            options = self.options,
+            id = select.prop('id'),
+            hiddenInputSelector = "#" + id,
+            textInputId = "CombifyInput-" + id,
+            textInputSelector = "#" + textInputId,
+            name = select.prop('name'),
+            selectedValue = select.find(':selected').val(),
+            selectedText = select.find(':selected').text(),
+            selectOptions = select.find('option'),
+            optionArray = new Array();
 
             //Hide the original select
             select.hide();
 
             //Insert new HTML for a text input and a button to trigger the dropdown
             select.before('<div>' +
-						   '<span class="ui-combobox">' +
-						   '<input type="hidden" id="' + id + '" name="' + name + '" value="' + selectedValue + '">' +
-						   '<input type="text" id="' + textInputId + '" class="ui-combobox-input" value="' + selectedText + '">' +
-						   '<a class="ui-combobox-toggle"></a>' +
-						   '</span></div>');
+                '<span class="ui-combobox">' +
+                '<input type="hidden" class="insertedInput" id="' + id + '" name="' + name + '" value="' + selectedValue + '">' +
+                '<input type="text" id="' + textInputId + '" class="ui-combobox-input" value="' + selectedText + '">' +
+                '<a class="ui-combobox-toggle"></a>' +
+                '</span></div>');
 
             //Remove the the id and name from the original select since they are now on the hidden input so that posted forms will get the correct value
             select.removeAttr('id', null)
-									.removeAttr('name', null)
-									.on('change', function (event) {
-										event.stopPropagation();
-									});
+            .removeAttr('name', null)
+            .on('change', function (event) {
+              event.stopPropagation();
+          });
 
             //Get all the options from the select list and put them in an array for use in the autocomplete data source
             selectOptions.each(function (i) {
@@ -63,17 +63,17 @@
                 }
             })
             .on('change', function() {
-								var value = $(this).val();
-								var option = $(select).find('option').filter(function () { return $(this).html() == value; }).first()
+                var value = $(this).val();
+                var option = $(select).find('option').filter(function () { return $(this).html() == value; }).first()
 
 								//If no matching option is found in the select list, then set the hidden input to the entered value
 								if(!option.length){
-										$(hiddenInputSelector).val(value);
-								}
-								else{
-									$(hiddenInputSelector).val(option.val());
-								}
-            })
+                                  $(hiddenInputSelector).val(value);
+                              }
+                              else{
+                                 $(hiddenInputSelector).val(option.val());
+                             }
+                         })
             .on('blur', function () {
                 $(this).trigger('change');
             });
@@ -164,26 +164,26 @@
                     //Set the length of the select list to either the number of items in the list or 30, whichever is smaller
                     var size;
                     if (optionArray.length <= 30) {
-											size = optionArray.length;
-                    }
-                    else {
-                        size = 30;
-                    }
-										
-										var sizeAttr = size === 1 ? 2 : size;
-                    list.css({ "width": "auto",
-                        "position": "absolute",
-                        "z-index": "1"
+                       size = optionArray.length;
+                   }
+                   else {
+                    size = 30;
+                }
+                
+                var sizeAttr = size === 1 ? 2 : size;
+                list.css({ "width": "auto",
+                    "position": "absolute",
+                    "z-index": "1"
                     }) //Puts the list on top of all other elements
                     	    .prop("size", sizeAttr) //changes the select list to a listbox so that it will "expand"
                     	    .show();
                     	    
-                    if (minWidth > list.width()) {
-                        list.css("width", minWidth);
-                    }
-										
-										var listLineHeight = parseInt(list.find('option').first().css('font-size'),10);
-										list.css("height", listLineHeight * (size + 1));
+                            if (minWidth > list.width()) {
+                                list.css("width", minWidth);
+                            }
+                            
+                            var listLineHeight = parseInt(list.find('option').first().css('font-size'),10);
+                            list.css("height", listLineHeight * (size + 1));
 
                     //Attach a one-time event to the document to close the list if the user clicks anywhere else on the page.
                     $(document).one("click", function () {
@@ -192,7 +192,7 @@
 
                     function nextItem(event) {
                         var down = "down",
-                            up = "up"
+                        up = "up"
 
                         //If the user presses up arrow move to the previous item in the list
                         if (event.which === 38 && list.is(":visible")) {
@@ -233,13 +233,23 @@
 
                     //Attach an event to move through the list with the arrow keys
                     $(document).off("keydown.combifySelect")
-															 .on("keydown.combifySelect", nextItem);
+                    .on("keydown.combifySelect", nextItem);
                 }
             }
         },
 
-        destroy: function () {
-            var select = this.element
+        _destroy: function() {
+            var select = this.element,
+            inputObj = select.prev().find('.insertedInput'),
+            id = "",
+            name = "";
+            id = inputObj.prop('id');
+            name = inputObj.prop('name');
+
+            select.attr({
+                id: id,
+                name: name,
+            });
             select.off('change');
             select.prev().remove();
             select.show();
