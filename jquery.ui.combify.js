@@ -10,7 +10,7 @@
     $.widget("ui.combify", {
         options: {
     		capitalizeInput: false,
-			maxLength: 0
+		maxLength: 0
         },
         _create: function () {
             var self = this,
