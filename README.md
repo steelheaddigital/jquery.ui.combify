@@ -38,5 +38,13 @@ Usage:
 
            $("#SomeSelect").combify({capitalizeInput: true})
 
+###maxLength
 
+Locks the input field to a maximum length of characters
+
+Default: 0 or disabled
+
+Usage: 
+
+           $("#SomeSelect").combify({maxLength: 10})
 
