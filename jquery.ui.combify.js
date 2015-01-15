@@ -99,7 +99,7 @@
             
             //If maximum length is required
             if (options.maxLength>0) {
-				$(inputSelector).keyup(function () {
+				$(textInputSelector).keyup(function () {
 					if($(this).val().length>options.maxLength) {
 						var TempVal=$(this).val();
 						$(this).data('val', TempVal.substring(0,options.maxLength));
