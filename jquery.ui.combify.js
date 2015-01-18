@@ -9,7 +9,8 @@
 (function ($) {
     $.widget("ui.combify", {
         options: {
-            capitalizeInput: false
+    		capitalizeInput: false,
+		maxLength: 0
         },
         _create: function () {
             var self = this,
@@ -94,6 +95,17 @@
                 });
 
                 input = null;
+            }
+            
+            //If maximum length is required
+            if (options.maxLength>0) {
+				$(textInputSelector).keyup(function () {
+					if($(this).val().length>options.maxLength) {
+						var TempVal=$(this).val();
+						$(this).data('val', TempVal.substring(0,options.maxLength));
+						$(this).val(TempVal.substring(0,options.maxLength));
+					}
+				});
             }
 
             //Attach a change event to the select list to put the selected value in the new text input

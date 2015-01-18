@@ -72,6 +72,14 @@
 				<option>Some Other Option</option>
 			</select>
     </div>
+    <div style="margin-top: 20px;">
+		Maximum input length set to 10 characters.
+			<select id="CappedInput">
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+			</select>
+    </div>
 </body>
 </html>
 <script type="text/javascript">
@@ -80,5 +88,6 @@
 		$("#OneOption").combify();
 		$("#ThreeOptions").combify({capitalizeInput: true});
 		$("#LotsOptions").combify();
+		$("#CappedInput").combify({maxLength: 10});
 	});
 </script>
